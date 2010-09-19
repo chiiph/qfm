@@ -1,0 +1,38 @@
+=============== Qfm ===================
+
+Qfm is a Qt based file manager that's intended to be use only by keyboard.
+
+=============== MiniFAQ ===============
+- Why not just use the console?
+- Many reasons, but the main ones are that this way it's protable to every
+SO where Qt works (Linux, Windows, MacOSX). And the other one is that graphic 
+user interfaces have a couple of advantages that console basic text editing 
+doesn't have.
+
+- Why another file manager?
+- First of all, I reinvent the wheel just for fun. But apart from that, I
+wanted to make a file manager that I liked from top to bottom. I'm used to
+use vim, so I'll probably borrow some ideas from there. And I use dwm as a
+window manager, so you see the pattern here.
+
+- What does qfm offer me?
+- Not much right now, but the main ideas in which qfm is based are these:
+	- Persistent selection (even when navigating directories).
+	- Full keyboard driven UI.
+	- Comunication between different instances of qfm (this is my shared 
+	memory experiment).
+	- Simple, extensible design.
+
+- Can I use qfm right now?
+- You can. But is really not that stable right now (e.g. I haven't test it much)
+
+- Why qfm?
+- I wanted something short to type.
+
+=============== Contribute ============
+I need help with this if you want qfm to be really usable. This is a mini project
+of mine, and I'm going to use it, but for this to get to a stable stage, I
+need many eyes and hands in the code.
+
+=============== License ===============
+This is licensed GPLv2, even if the files don't have the header yet.

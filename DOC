@@ -1,0 +1,44 @@
+Qfm
+
+CommandBuffer:
+	A Buffer that has as its first element the name or ID of a Command and a list of files/directories to apply it to.
+	It must provide a way to load a given CommandBuffer to a SharedMemory.
+
+NOTE: Commands implemented should inherit CommandBuffer and define the virtual functions.
+
+Qfm (UI):
+	Shows to list widgets or may be two widgets with vertical layout.
+	The basic idea is that is all driven by the keyboard (except the list selection for starters, may be).
+
+	If the selected buffer is not empty, given the key pressed, there's a command associated to it, so it loads the IPC buffer 
+	with the CommandBuffers.
+	There a key that means "flush buffer in here", that basically does whatever is in the buffer in the current directory, and
+	empties the buffer.
+
+NOTE: may be the best way to handle interaction with a frontend is by qt signals, and a proxy object that connects those with the proper slot
+NOTE: commands can be singletons
+TODO: Make a debugging class
+
+NOTE: Files and directory are named as items.
+
+Shared memory note: only one buffer at a time can be hadled for now. But the buffer can be compused of several commands (although the first version will only handle one).
+
+Workflow:
+	Copy:
+	There are items selected, they are copied to the common buffer, and the selected items in the current instance should now be unselected.
+
+TODO:
+	Core:
+		- Clear buffer after operate [Mostly done]
+		- Add a delete command.
+		- For a cut command it could inherit from pastecommand and deletecommand and run them in that order.
+		- Add a rename command.
+		- Directory navigation. [Mostly done]
+		- Persistent selection throught directory navigation
+	UI:
+		- Selected buffer keys to unselect. [Done. It should work if there's another buffer added]
+		- Flexible properties to the ListItems to differenciate from cutted/coppied/etc items but the change hasn't been applied.
+		- Easy to handle short cut key assigments to commands.
+	GUI:
+		- Rethink the handling of the buffer lists, may be vertical layouts isn't the best.
+		- Style it a little bit better with css.
