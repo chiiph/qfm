@@ -30,7 +30,8 @@ class RenamePrompt : public QDialog {
 
 		static QString prompt(QString file);
 
-		void set_file(QString file) { ui.file_label->setText(file); }
+		void set_file(QString file) 
+			{ ui.file_label->setText(file); ui.newname_line->setText(file); }
 		QString get_newname() { return ui.newname_line->text(); }
 
 	private:
