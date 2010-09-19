@@ -1,5 +1,4 @@
 =============== Qfm ===================
-
 Qfm is a Qt based file manager that's intended to be use only by keyboard.
 
 =============== MiniFAQ ===============
@@ -28,6 +27,20 @@ window manager, so you see the pattern here.
 
 - Why qfm?
 - I wanted something short to type.
+
+=============== MiniHelp ==============
+Short cuts:
+	J - Go down in the directory buffer.
+	K - Go up in the directory buffer.
+	L - Change the current file in the directory buffer to the selected buffer.
+	U - Go down in the selected buffer.
+	I - Go up in the selected buffer.
+	O - Change the curret file in the selected buffer to the directory buffer
+	Enter - Change to the current directory. Does nothing with files.
+	Y - Loads the copy command to the selected files.
+	C - Loads the cut command to the selected files.
+	D - Deletes the selected files.
+	P - Flushes the loaded command in the currect directory.
 
 =============== Contribute ============
 I need help with this if you want qfm to be really usable. This is a mini project
