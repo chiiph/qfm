@@ -4,6 +4,7 @@
 #include "pastecommand.h"
 #include "deletecommand.h"
 #include "movecommand.h"
+#include "renamecommand.h"
 #include "listitem.h"
 
 QfmCore::QfmCore(Qfm *q) : 
@@ -104,6 +105,8 @@ QfmCore::load_commands() {
 	command_map[d->get_command_id()] = d;
 	MoveCommand *m = new MoveCommand();
 	command_map[m->get_command_id()] = m;
+	RenameCommand *r = new RenameCommand();
+	command_map[r->get_command_id()] = r;
 }
 
 void 

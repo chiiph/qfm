@@ -11,6 +11,7 @@ HEADERS += src/commandbuffer.h \
 	src/listitem.h \
 	src/pastecommand.h \
 	src/movecommand.h \
+	src/renamecommand.h \
 	src/deletecommand.h
 SOURCES += src/commandbuffer.cpp \
 	src/main.cpp \
@@ -19,6 +20,7 @@ SOURCES += src/commandbuffer.cpp \
 	src/listitem.cpp \
 	src/pastecommand.cpp \
 	src/movecommand.cpp \
+	src/renamecommand.cpp \
 	src/deletecommand.cpp
 
 MOC_DIR = moc

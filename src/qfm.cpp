@@ -95,6 +95,15 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 			core->run("move", l);
 		break;
 
+		case Qt::Key_R:
+			qDebug() << "Renaming selected";
+			foreach(ListItem *file, *(core->get_items(QfmCore::Selected))) {
+				l << file->get_full_path();
+			}
+
+			core->run("rename", l);
+		break;
+
 		case Qt::Key_P:
 			core->flush_buffer();
 		break;

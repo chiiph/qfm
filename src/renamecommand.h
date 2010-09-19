@@ -19,18 +19,19 @@ class RenameCommand : public CommandBuffer {
 	
 	private:
 		QString newname;
-
-		friend MoveCommand::run(QString current_dir, QStringList files);
 };
 
 #include "ui/ui_renameprompt.h"
 
 class RenamePrompt : public QDialog {
 	public:
-		RenamePrompt(QWidge *parent = 0);
+		RenamePrompt(QWidget *parent = 0);
 		~RenamePrompt();
 
-		static QString prompt();
+		static QString prompt(QString file);
+
+		void set_file(QString file) { ui.file_label->setText(file); }
+		QString get_newname() { return ui.newname_line->text(); }
 
 	private:
 		// Ui definition of the mainwindow

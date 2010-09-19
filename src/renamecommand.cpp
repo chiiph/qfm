@@ -1,9 +1,9 @@
 #include "renamecommand.h"
 
 RenameCommand::RenameCommand() : 
-	CommandBuffer(QString("delete")) 
+	CommandBuffer(QString("rename")) 
 {
-	property = CommandBuffer::InPlace | CommandBuffer::Display;
+	property = CommandBuffer::InPlace;
 	newname = "";
 }
 
@@ -14,38 +14,35 @@ RenameCommand::~RenameCommand() {
 void 
 RenameCommand::run(QString current_dir, QStringList files) {
 	qDebug() << "Running RenameCommand";
-	if(newname.size() != 0) {
-		QDir dir(current_dir);
+	QDir dir(current_dir);
+	
+	if(!dir.isReadable()) return;
+
+	QFileInfo *finfo;
+	foreach(QString file, files) {
+		finfo = new QFileInfo(file);
 		
-		if(!dir.isReadable()) return;
+		if(finfo->fileName()=="." || finfo->fileName()=="..") continue;
 
-		QFileInfo *finfo;
-		foreach(QString file, files) {
-			qDebug() << file;
-			finfo = new QFileInfo(file);
-			
-			if(finfo->fileName()=="." || finfo->fileName()=="..") continue;
+		newname = RenamePrompt::prompt(finfo->fileName());
+		if(newname.size() == 0) continue;
 
-			if(finfo->isFile()) {
-				qDebug() << "Removing file";
-				if(!QFile::remove(finfo->filePath()))
-					qDebug() << "ERROR: Trying to delete" << finfo->fileName() << "to" << dir.path();
-			} else if(finfo->isDir()) {
-				if(!removeDir(finfo->filePath()))
-					qDebug() << "ERROR: Trying to copy dir" << finfo->filePath();
-			}
-
-			delete finfo;
+		if(finfo->isFile()) {
+			if(!QFile(finfo->filePath()).rename(finfo->path()+"/"+newname))
+				qDebug() << "ERROR: Trying to rename" << finfo->fileName() << "to" << dir.path();
+		} else if(finfo->isDir()) {
+			if(!QDir().rename(finfo->filePath(), finfo->path()+"/"+newname))
+				qDebug() << "ERROR: Trying to copy dir" << finfo->filePath();
 		}
-	} else
-		qDebug() << "Not doing it";
+
+		delete finfo;
+	}
 }
 
 bool
 RenameCommand::show() {
-	int res = QMessageBox::question(0, tr("Are you?"), tr("Are you sure you want to delete this file(s)?"), QMessageBox::Yes | QMessageBox::No);
+//    newname = RenamePrompt::prompt();
 
-	doit = (res == QMessageBox::Yes);
 	return true;
 }
 
@@ -60,7 +57,13 @@ RenamePrompt::~RenamePrompt() {
 }
 
 QString
-RenamePrompt::prompt() {
+RenamePrompt::prompt(QString file) {
 	RenamePrompt r;
-	r.exec()
+	r.set_file(file);
+	r.exec();
+	if(r.result() == QDialog::Accepted) {
+		return r.get_newname();
+	}
+
+	return QString("");
 }
