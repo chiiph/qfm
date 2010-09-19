@@ -4,7 +4,7 @@ Qfm is a Qt based file manager that's intended to be use only by keyboard.
 
 =============== MiniFAQ ===============
 - Why not just use the console?
-- Many reasons, but the main ones are that this way it's protable to every
+- Many reasons, but the main ones are that this way it's portable to every
 SO where Qt works (Linux, Windows, MacOSX). And the other one is that graphic 
 user interfaces have a couple of advantages that console basic text editing 
 doesn't have.
