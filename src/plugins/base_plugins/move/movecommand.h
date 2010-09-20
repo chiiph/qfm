@@ -2,12 +2,10 @@
 #define MOVECOMMAND_H
 
 #include "commandbuffer.h"
-#include "deletecommand.h"
-#include "pastecommand.h"
 
-#include <QtGui>
-
-class MoveCommand : public CommandBuffer {
+class MoveCommand : public QObject, public CommandBuffer {
+	Q_OBJECT
+	Q_INTERFACES(CommandBuffer)
 	public:
 		MoveCommand();
 		virtual ~MoveCommand();
@@ -18,8 +16,11 @@ class MoveCommand : public CommandBuffer {
 		virtual void run(QString current_dir, QStringList files);
 	
 	private:
-		friend void DeleteCommand::run(QString current_dir, QStringList files);
-		friend void PasteCommand::run(QString current_dir, QStringList files);
+		void runPaste(QString current_dir, QStringList files);
+		void runDelete(QString current_dir, QStringList files);
+		bool copyDir(const QString &src, const QString &dest);
+		bool copyFile(QFileInfo finfo, QDir dest);
+		bool removeDir(const QString &dirName);
 };
 
 

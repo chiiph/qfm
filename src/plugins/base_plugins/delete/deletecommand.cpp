@@ -1,9 +1,9 @@
 #include "deletecommand.h"
 
 DeleteCommand::DeleteCommand() : 
-	CommandBuffer(QString("delete")) 
+	CommandBuffer(QString("delete"), Qt::Key_D) 
 {
-	property = CommandBuffer::InPlace | CommandBuffer::Display;
+	CommandBuffer::property = CommandBuffer::InPlace | CommandBuffer::Display;
 	doit = false;
 }
 
@@ -70,3 +70,5 @@ DeleteCommand::removeDir(const QString &dirName) {
 
 	return result;
 }
+
+Q_EXPORT_PLUGIN2(plugin_delete, DeleteCommand)

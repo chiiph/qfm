@@ -88,6 +88,7 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 	qDebug() << "Custom handling";
 
 	qDebug() << ev->key();
+	qDebug() << Qt::Key_C;
 	QString id = core->get_key_map()->value((Qt::Key)ev->key(), QString(""));
 	qDebug() << id;
 	if(id.size() != 0) {

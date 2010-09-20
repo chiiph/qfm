@@ -5,13 +5,15 @@
 
 #include <QtGui>
 
-class DeleteCommand : public CommandBuffer {
+class DeleteCommand : public QObject, public CommandBuffer {
+	Q_OBJECT
+	Q_INTERFACES(CommandBuffer)
 	public:
 		DeleteCommand();
 		virtual ~DeleteCommand();
 	
 		void force_doit() { doit = true; }
-	public slots:
+
 		// Pastes the files from the buffer to
 		// current_dir
 		virtual void run(QString current_dir, QStringList files);
