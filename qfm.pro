@@ -19,5 +19,3 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = src/ui
 FORMS += src/ui/mainwin.ui
-
-LIBS = -Lbin/plugins
