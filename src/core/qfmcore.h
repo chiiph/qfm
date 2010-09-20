@@ -2,6 +2,7 @@
 #define QFMCORE_H
 
 #include <QtCore>
+#include <QtPlugin>
 
 class CommandBuffer;
 class ListItem;
@@ -34,15 +35,21 @@ class QfmCore : public QObject {
 		void set_dir(QString dir) { directory.setPath(dir); } 
 		void run(QString, QStringList);
 
+		QMap<Qt::Key, QString> *get_key_map() { return &key_map; }
+
 	public slots:
 		// Clear the shared memory attached by detaching from it
 		void clearmem();
 	
 	private:
+		// Location of the plugins
+		QDir plugins_dir;
 		// Shared memory for IPC
 		QSharedMemory shared_memory;
 		// Map for a command ID to a commandbuffer object
 		QMap<QString, CommandBuffer *> command_map;
+		// Map for a command key to a commandbuffer ID
+		QMap<Qt::Key, QString> key_map;
 		// Current directory
 		QDir directory;
 		// Index of the current selected item

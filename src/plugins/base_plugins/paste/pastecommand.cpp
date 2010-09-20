@@ -1,8 +1,8 @@
 #include "pastecommand.h"
 
 PasteCommand::PasteCommand() : 
-	CommandBuffer(QString("copy")) {
-
+	CommandBuffer(QString("copy"), Qt::Key_Y)
+{
 }
 
 PasteCommand::~PasteCommand() {
@@ -71,3 +71,4 @@ PasteCommand::copyFile(QFileInfo finfo, QDir dest) {
 	return true;
 }
 
+Q_EXPORT_PLUGIN2(plugin_paste, PasteCommand)

@@ -1,5 +1,5 @@
 #include "qfm.h"
-#include "qfmcore.h"
+#include "core/qfmcore.h"
 #include "listitem.h"
 
 Qfm::Qfm() : 
@@ -39,6 +39,7 @@ Qfm::update_layouts() {
 void
 Qfm::keyPressEvent(QKeyEvent *ev) {
 	QStringList l;
+	bool handled = true;
 	switch(ev->key()) {
 		case Qt::Key_K:
 			up(QfmCore::Directory);
@@ -68,33 +69,6 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 			move_selected(QfmCore::Selected, QfmCore::Directory);
 		break;
 
-		case Qt::Key_Y:
-			qDebug() << "Yanking selected";
-			foreach(ListItem *file, *(core->get_items(QfmCore::Selected))) {
-				l << file->get_full_path();
-			}
-
-			core->run("copy", l);
-		break;
-
-		case Qt::Key_D:
-			qDebug() << "Deleting selected";
-			foreach(ListItem *file, *(core->get_items(QfmCore::Selected))) {
-				l << file->get_full_path();
-			}
-
-			core->run("delete", l);
-		break;
-
-		case Qt::Key_C:
-			qDebug() << "Cutting selected";
-			foreach(ListItem *file, *(core->get_items(QfmCore::Selected))) {
-				l << file->get_full_path();
-			}
-
-			core->run("move", l);
-		break;
-
 		case Qt::Key_P:
 			core->flush_buffer();
 		break;
@@ -103,6 +77,25 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 			core->navigate();
 			update_layouts();
 		break;
+
+		default:
+			handled = false;
+		break;
+	}
+
+	if(handled) return;
+
+	qDebug() << "Custom handling";
+
+	qDebug() << ev->key();
+	QString id = core->get_key_map()->value((Qt::Key)ev->key(), QString(""));
+	qDebug() << id;
+	if(id.size() != 0) {
+		foreach(ListItem *file, *(core->get_items(QfmCore::Selected))) {
+			l << file->get_full_path();
+		}
+
+		core->run(id, l);
 	}
 }
 

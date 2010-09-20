@@ -1,9 +1,6 @@
 #include "qfmcore.h"
-#include "qfm.h"
-#include "commandbuffer.h"
-#include "pastecommand.h"
-#include "deletecommand.h"
-#include "movecommand.h"
+#include "../qfm.h"
+#include "../interfaces/commandbuffer.h"
 #include "listitem.h"
 
 QfmCore::QfmCore(Qfm *q) : 
@@ -39,14 +36,14 @@ QfmCore::~QfmCore() {
 
 void 
 QfmCore::filldir() {
-	qDebug() << items.size();
+//    qDebug() << items.size();
 	for(int i = 0; i < QfmCore::Last; i++) {
 		while(!get_items((Buffer)i)->empty())
 			delete (get_items((Buffer)i))->takeFirst();
 	}
 
 	foreach(QString file, directory.entryList()) {
-		qDebug() << file;
+//        qDebug() << file;
 		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file, qfm);
 	}
 
@@ -98,12 +95,37 @@ QfmCore::flush_buffer() {
 
 void 
 QfmCore::load_commands() {
-	PasteCommand *p = new PasteCommand();
-	command_map[p->get_command_id()] = p;
-	DeleteCommand *d = new DeleteCommand();
-	command_map[d->get_command_id()] = d;
-	MoveCommand *m = new MoveCommand();
-	command_map[m->get_command_id()] = m;
+	plugins_dir = QDir(qApp->applicationDirPath());
+
+#if defined(Q_OS_WIN)
+	if (plugins_dir.dirName().toLower() == "debug" || plugins_dir.dirName().toLower() == "release")
+		plugins_dir.cdUp();
+#elif defined(Q_OS_MAC)
+	if (plugins_dir.dirName() == "MacOS") {
+		plugins_dir.cdUp();
+		plugins_dir.cdUp();
+		plugins_dir.cdUp();
+	}
+#endif
+	plugins_dir.cd("plugins");
+
+	CommandBuffer *cb = NULL;
+	QObject *plugin = NULL;
+
+	foreach (QString fileName, plugins_dir.entryList(QDir::Files)) {
+		qDebug() << plugins_dir.absoluteFilePath(fileName);
+		QPluginLoader loader(plugins_dir.absoluteFilePath(fileName));
+		if(!loader.load())
+			qDebug() << loader.errorString();
+		plugin = loader.instance();
+		qDebug() << plugin;
+		if (plugin) {
+			cb = qobject_cast<CommandBuffer *>(plugin);
+			command_map[cb->get_command_id()] = cb;
+			key_map[cb->get_key()] = cb->get_command_id();
+			qDebug() << "Loading" << cb->get_command_id();
+		}
+	}
 }
 
 void 

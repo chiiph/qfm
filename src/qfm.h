@@ -3,7 +3,7 @@
 
 #include <QtGui>
 
-#include "qfmcore.h"
+#include "core/qfmcore.h"
 #include "ui/ui_mainwin.h"
 
 class ListItem;

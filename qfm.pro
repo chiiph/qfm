@@ -3,25 +3,21 @@ TARGET =
 DEPENDPATH += . src
 INCLUDEPATH += . src
 CONFIG += qt debug
+DESTDIR = bin
 
 # Input
-HEADERS += src/commandbuffer.h \
-	src/qfmcore.h \
+HEADERS += src/interfaces/commandbuffer.h \
+	src/core/qfmcore.h \
 	src/qfm.h \
-	src/listitem.h \
-	src/pastecommand.h \
-	src/movecommand.h \
-	src/deletecommand.h
-SOURCES += src/commandbuffer.cpp \
+	src/listitem.h
+SOURCES += src/core/qfmcore.cpp \
 	src/main.cpp \
-	src/qfmcore.cpp \
 	src/qfm.cpp \
-	src/listitem.cpp \
-	src/pastecommand.cpp \
-	src/movecommand.cpp \
-	src/deletecommand.cpp
+	src/listitem.cpp
 
 MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = src/ui
 FORMS += src/ui/mainwin.ui
+
+LIBS = -Lbin/plugins

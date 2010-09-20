@@ -3,12 +3,13 @@
 
 #include "commandbuffer.h"
 
-class PasteCommand : public CommandBuffer {
+class PasteCommand : public QObject, public CommandBuffer {
+	Q_OBJECT
+	Q_INTERFACES(CommandBuffer)
 	public:
 		PasteCommand();
 		virtual ~PasteCommand();
 	
-	public slots:
 		// Pastes the files from the buffer to
 		// current_dir
 		virtual void run(QString current_dir, QStringList files);
