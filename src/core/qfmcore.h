@@ -26,8 +26,6 @@ class QfmCore : public QObject {
 		void navigate();
 
 		QList<ListItem *> *get_items(Buffer b) { return items[b]; }
-		QList<ListItem *> *get_selected_items() { return &selected_items; }
-		QList<ListItem *> *get_directory_items() { return &directory_items; }
 
 		int get_selected_item(Buffer b) { return selected_item[b]; }
 		void update_selected_item(Buffer b, int i) { selected_item[b] += i; }
@@ -37,9 +35,22 @@ class QfmCore : public QObject {
 
 		QMap<Qt::Key, QString> *get_key_map() { return &key_map; }
 
+	signals:
+		void refresh_ui();
+
 	public slots:
 		// Clear the shared memory attached by detaching from it
 		void clearmem();
+		// Operations for plugins
+		// Refreshes the displaying files
+		void refresh();
+		// Sets the buffer as anything it wants
+		// For displaying hal resources, or simply a filtered
+		// list of files
+		void set_buffer(Buffer b, QList<ListItem *> files);
+		// Goes to the given directory
+		// it could be a relative dir, or a full path
+		void gotodir(QString dir);
 	
 	private:
 		// Location of the plugins
@@ -55,10 +66,6 @@ class QfmCore : public QObject {
 		// Index of the current selected item
 		// in the given buffer
 		QList<int> selected_item;
-		// List of selected ListItems
-		QList <ListItem *> selected_items;
-		// List of directory ListItems
-		QList <ListItem *> directory_items;
 		// List of items according to each
 		// buffer in Buffer
 		QList <QList<ListItem *> *> items;

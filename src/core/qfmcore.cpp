@@ -36,23 +36,21 @@ QfmCore::~QfmCore() {
 
 void 
 QfmCore::filldir() {
-//    qDebug() << items.size();
 	for(int i = 0; i < QfmCore::Last; i++) {
 		while(!get_items((Buffer)i)->empty())
 			delete (get_items((Buffer)i))->takeFirst();
+		selected_item[i] = -1;
 	}
 
 	foreach(QString file, directory.entryList()) {
-//        qDebug() << file;
 		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file, qfm);
 	}
 
-//    qDebug() << directory_items.count();
 	for(int i = 0; i < QfmCore::Last; i++) {
-		if(!get_items((Buffer)i)->empty())
+		if(!get_items((Buffer)i)->empty()) {
 			get_items((Buffer)i)->at(0)->toggle_selected();
-		else
-			selected_item[i] = -1;
+			selected_item[i] = 0;
+		}
 	}
 }
 
@@ -121,6 +119,7 @@ QfmCore::load_commands() {
 		qDebug() << plugin;
 		if (plugin) {
 			cb = qobject_cast<CommandBuffer *>(plugin);
+			this->connect(plugin, SIGNAL(go(QString)), SLOT(gotodir(QString)));
 			command_map[cb->get_command_id()] = cb;
 			key_map[cb->get_key()] = cb->get_command_id();
 			qDebug() << "Loading" << cb->get_command_id();
@@ -212,9 +211,6 @@ QfmCore::read() {
 	in >> text;
 	shared_memory.unlock();
 
-	qDebug() << "saraaaaaaaannnnn";
-	qDebug() << text;
-
 	shared_memory.detach();
 
 	return text;
@@ -237,4 +233,35 @@ QfmCore::run(QString cmd, QStringList files) {
 		QString current_dir = directory.absolutePath();
 		command_map[cmd]->run(current_dir, files);
 	}
+}
+
+void
+QfmCore::refresh() {
+	filldir();
+	emit refresh_ui();
+}
+
+void
+QfmCore::set_buffer(Buffer b, QList<ListItem *> files) {
+	while(!get_items(b)->empty())
+		delete (get_items(b))->takeFirst();
+
+	foreach(ListItem *file, files) {
+		*(get_items(b)) << file;
+	}
+
+	if(!get_items(b)->empty())
+		get_items(b)->at(0)->toggle_selected();
+	else
+		selected_item[b] = -1;
+
+	emit refresh_ui();
+}
+
+void
+QfmCore::gotodir(QString dir) {
+	qDebug() << "gotoing!!";
+	directory.cd(dir);
+	filldir();
+	emit refresh_ui();
 }

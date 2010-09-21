@@ -33,8 +33,7 @@ class RenamePrompt : public QDialog {
 		QString get_newname() { return ui.newname_line->text(); }
 
 	private:
-		// Ui definition of the mainwindow
 		Ui::renameprompt ui;
 };
 
-#endif // PASTECOMMAND_H
+#endif // RENAMECOMMAND_H

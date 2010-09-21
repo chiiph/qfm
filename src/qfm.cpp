@@ -5,6 +5,9 @@
 Qfm::Qfm() : 
 	QMainWindow() {
 	core = new QfmCore(this);
+
+	this->connect(core, SIGNAL(refresh_ui()), SLOT(update_layouts()));
+
 	ui.setupUi(this);
 	
 	spacer_selected = new QSpacerItem(0,0,QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -18,6 +21,7 @@ Qfm::~Qfm() {
 
 void
 Qfm::update_layouts() {
+	qDebug() << "Updating layouts";
 	// First clear everything
 	for(int i = 0; i < ui.directory_layout->count(); i++) {
 		ui.directory_layout->removeItem(ui.directory_layout->itemAt(i));

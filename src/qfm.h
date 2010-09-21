@@ -15,6 +15,10 @@ class Qfm : public QMainWindow {
 		Qfm();
 		virtual ~Qfm();
 	
+	private slots:
+		// Handles the list layouts
+		void update_layouts();
+
 	private:
 		// Ui definition of the mainwindow
 		Ui::MainWindow ui;
@@ -25,8 +29,6 @@ class Qfm : public QMainWindow {
 
 		// Key event handler
 		void keyPressEvent(QKeyEvent *ev);
-		// Handles the list layouts
-		void update_layouts();
 
 		void up(QfmCore::Buffer b);
 		void down(QfmCore::Buffer b);
