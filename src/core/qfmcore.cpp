@@ -43,7 +43,7 @@ QfmCore::filldir() {
 	}
 
 	foreach(QString file, directory.entryList()) {
-		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file, qfm);
+		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file);
 	}
 
 	for(int i = 0; i < QfmCore::Last; i++) {

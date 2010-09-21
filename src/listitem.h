@@ -3,11 +3,9 @@
 
 #include <QtGui>
 
-class ListItem : public QLabel {
-	Q_OBJECT
-
+class ListItem : public QListWidgetItem {
 	public:
-		ListItem(QString file, QString full_path, QWidget *parent = 0);
+		ListItem(QString file, QString full_path, QListWidget *parent = 0);
 		virtual ~ListItem();
 
 		void toggle_selected();

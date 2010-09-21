@@ -4,7 +4,7 @@
 #include <QtGui>
 
 #include "core/qfmcore.h"
-#include "ui/ui_mainwin.h"
+#include "ui/ui_mainwin2.h"
 
 class ListItem;
 
@@ -18,6 +18,7 @@ class Qfm : public QMainWindow {
 	private slots:
 		// Handles the list layouts
 		void update_layouts();
+		void scroll_everything();
 
 	private:
 		// Ui definition of the mainwindow
@@ -37,6 +38,8 @@ class Qfm : public QMainWindow {
 		// the file selected in position pos
 		void select(int pos, QfmCore::Buffer src, QfmCore::Buffer dest);
 		void move_selected(QfmCore::Buffer src, QfmCore::Buffer dest);
+
+		bool eventFilter(QObject *obj, QEvent *event);
 };
 
 #endif // QFM
