@@ -1,0 +1,7 @@
+moc_*
+Makefile
+*.o
+ui_*
+test
+test2
+bin
