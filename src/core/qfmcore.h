@@ -39,8 +39,10 @@ class QfmCore : public QObject {
 		void refresh_ui();
 
 	public slots:
+#ifdef SHAREDMEM
 		// Clear the shared memory attached by detaching from it
 		void clearmem();
+#endif
 		// Operations for plugins
 		// Refreshes the displaying files
 		void refresh();
@@ -55,8 +57,10 @@ class QfmCore : public QObject {
 	private:
 		// Location of the plugins
 		QDir plugins_dir;
+#ifdef SHAREDMEM
 		// Shared memory for IPC
 		QSharedMemory shared_memory;
+#endif
 		// Map for a command ID to a commandbuffer object
 		QMap<QString, CommandBuffer *> command_map;
 		// Map for a command key to a commandbuffer ID
@@ -80,10 +84,12 @@ class QfmCore : public QObject {
 		// Fills directory_items with
 		// the files in the current dir
 		void filldir();
+#ifdef SHAREDMEM
 		// Writes data to shared_memory
 		bool write(QString data);
 		// Reads from shared_memory
 		QString read();
+#endif
 };
 
 #endif // QFMCORE_H

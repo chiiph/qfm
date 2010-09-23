@@ -5,15 +5,19 @@
 
 QfmCore::QfmCore(Qfm *q) : 
 	QObject(),
+#ifdef SHAREDMEM
 	shared_memory("qfm_mem"),
+#endif
 	directory(QDir::home()),
 	qfm(q) {
 	load_commands();
 
+#ifdef SHAREDMEM
 	// "After crash" shared memory handler
 	shared_memory.attach();
 	if(shared_memory.isAttached())
 		shared_memory.detach();
+#endif
 
 	connect(&timer, SIGNAL(timeout()), this, SLOT(clearmem()));
 
@@ -28,10 +32,12 @@ QfmCore::QfmCore(Qfm *q) :
 }
 
 QfmCore::~QfmCore() {
+#ifdef SHAREDMEM
 	if(shared_memory.isAttached()) {
 		qDebug() << "INFO: Detaching from shared_memory.";
 		shared_memory.detach();
 	}
+#endif
 }
 
 void 
@@ -59,31 +65,42 @@ QfmCore::load_buffer(QString command, QStringList files) {
 	qDebug() << command;
 	qDebug() << files;
 
-	QString strbuf = "";
-	strbuf += QString::number(1) + ";";
+	QString strbuf = "Qfm;";
 	strbuf += command + ";";
 
 	foreach(QString file, files) {
 		strbuf += file + ";";
 	}
 
+#ifdef SHAREDMEM
 	write(strbuf);
 
 	timer.start(10);
+#else
+	QClipboard *clipboard = QApplication::clipboard();
+	clipboard->setText(strbuf);	
+#endif
 }
 
 void 
 QfmCore::flush_buffer() {
 	QString current_dir = directory.absolutePath();
+	QString text = "";
 
-	QString text = read();
+#ifdef SHAREDMEM
+	text = read();
 	text = text.replace(0,1,"0");
 	qDebug() << "TEXT NOW>" << text;
 	write(text);
 	qDebug() << "A VER" << read();
+#else
+	QClipboard *clipboard = QApplication::clipboard();
+	text = clipboard->text();
+#endif
 
 	QStringList files = text.split(";", QString::SkipEmptyParts);
 	QString pid = files.takeAt(0);
+	if(pid != "Qfm") return; // Check whether the buffer was set by qfm
 	QString cmd = files.takeAt(0);
 	qDebug() << "Command to run:";
 	qDebug() << cmd;
@@ -137,6 +154,7 @@ QfmCore::navigate() {
 	selected_item[QfmCore::Directory] = 0;
 }
 
+#ifdef SHAREDMEM
 void 
 QfmCore::clearmem() {
 	if(shared_memory.lock()) {
@@ -215,6 +233,7 @@ QfmCore::read() {
 
 	return text;
 }
+#endif
 
 void
 QfmCore::run(QString cmd, QStringList files) {
