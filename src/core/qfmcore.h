@@ -51,6 +51,8 @@ class QfmCore : public QObject {
 		// Goes to the given directory
 		// it could be a relative dir, or a full path
 		void gotodir(QString dir);
+		// Filters the files displayed
+		void set_filter(QString f);
 	
 	private:
 		// Location of the plugins
@@ -73,6 +75,8 @@ class QfmCore : public QObject {
 		Qfm *qfm;
 		// Timer for polling if the buffer is used or not
 		QTimer timer;
+		// Filter for the file list
+		QRegExp filter;
 
 		// Loads all the commands to the command_map
 		// TODO: make this more generic

@@ -12,6 +12,8 @@ class Qfm : public QMainWindow {
 	Q_OBJECT
 
 	public:
+		enum Mode {Normal, Search, Last};
+
 		Qfm();
 		virtual ~Qfm();
 	
@@ -19,6 +21,7 @@ class Qfm : public QMainWindow {
 		// Handles the list layouts
 		void update_layouts();
 		void scroll_everything();
+		void set_filter(const QString &);
 
 	private:
 		// Ui definition of the mainwindow
@@ -27,6 +30,8 @@ class Qfm : public QMainWindow {
 		QSpacerItem *spacer_selected, *spacer_directory;
 		// Qfm Core instance
 		QfmCore *core;
+		// Current mode
+		Mode mode;
 
 		// Key event handler
 		void keyPressEvent(QKeyEvent *ev);

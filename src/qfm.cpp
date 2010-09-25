@@ -16,6 +16,8 @@ Qfm::Qfm() :
 
 	ui.directory_list->installEventFilter(this);
 	ui.selected_list->installEventFilter(this);
+
+	mode = Qfm::Normal;
 }
 
 Qfm::~Qfm() {
@@ -93,6 +95,30 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		case Qt::Key_Return:
 			core->navigate();
 			update_layouts();
+		break;
+
+		case Qt::Key_Slash:
+			if(mode == Qfm::Normal) {
+				mode = Qfm::Search;
+				connect(ui.search_line, SIGNAL(textChanged(const QString &)),
+						this, SLOT(set_filter(const QString &)));
+				ui.search_line->setEnabled(true);
+				ui.search_line->setFocus();
+			}
+		break;
+
+		case Qt::Key_Escape:
+			if(mode == Qfm::Search) {
+				mode = Qfm::Normal;
+				disconnect(ui.search_line, 0, this, 0);
+				ui.search_line->clearFocus();
+				ui.search_line->setEnabled(false);
+			}
+		break;
+		
+		case Qt::Key_Space:
+			set_filter("");
+			ui.search_line->setText("");
 		break;
 
 		default:
@@ -182,4 +208,10 @@ Qfm::eventFilter(QObject *obj, QEvent *event) {
 	} else {
 		return false;
 	}
+}
+
+void
+Qfm::set_filter(const QString &str) {
+	core->set_filter(str);
+	core->refresh();
 }

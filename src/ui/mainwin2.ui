@@ -33,6 +33,13 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="search_line">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
