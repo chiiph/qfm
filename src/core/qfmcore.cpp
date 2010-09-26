@@ -28,6 +28,9 @@ QfmCore::QfmCore(Qfm *q) :
 	// Init buffer selection
 	for(int i = 0; i < QfmCore::Last; i++)
 		selected_item.append(0);
+
+	filter.setPattern("");
+
 	filldir();
 }
 
@@ -48,8 +51,8 @@ QfmCore::filldir() {
 		selected_item[i] = -1;
 	}
 
-	foreach(QString file, directory.entryList()) {
-		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file, qfm);
+	foreach(QString file, directory.entryList().filter(filter)) {
+		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file);
 	}
 
 	for(int i = 0; i < QfmCore::Last; i++) {
@@ -283,4 +286,9 @@ QfmCore::gotodir(QString dir) {
 	directory.cd(dir);
 	filldir();
 	emit refresh_ui();
+}
+
+void 
+QfmCore::set_filter(QString f) {
+	filter = QRegExp(f);
 }

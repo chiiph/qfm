@@ -13,6 +13,11 @@ Qfm::Qfm() :
 	spacer_selected = new QSpacerItem(0,0,QSizePolicy::Expanding, QSizePolicy::Expanding);
 	spacer_directory = new QSpacerItem(0,0,QSizePolicy::Expanding, QSizePolicy::Expanding);
 	update_layouts();
+
+	ui.directory_list->installEventFilter(this);
+	ui.selected_list->installEventFilter(this);
+
+	mode = Qfm::Normal;
 }
 
 Qfm::~Qfm() {
@@ -23,20 +28,30 @@ void
 Qfm::update_layouts() {
 	qDebug() << "Updating layouts";
 	// First clear everything
-	for(int i = 0; i < ui.directory_layout->count(); i++) {
-		ui.directory_layout->removeItem(ui.directory_layout->itemAt(i));
-	}
-	for(int i = 0; i < ui.selected_layout->count(); i++) {
-		ui.selected_layout->removeItem(ui.selected_layout->itemAt(i));
-	}
+	while(ui.directory_list->count() > 0)
+		ui.directory_list->takeItem(0);
+	while(ui.selected_list->count() > 0)
+		ui.selected_list->takeItem(0);
 
 	// Then add everything
 	foreach(ListItem *it, *(core->get_items(QfmCore::Directory))) {
-		ui.directory_layout->addWidget(it);
+		ui.directory_list->addItem(it);
 	}
 
 	foreach(ListItem *it, *(core->get_items(QfmCore::Selected))) {
-		ui.selected_layout->addWidget(it);
+		ui.selected_list->addItem(it);
+	}
+}
+
+void
+Qfm::scroll_everything() {
+	foreach(ListItem *it, *(core->get_items(QfmCore::Directory))) {
+		if(it->is_selected())
+			ui.directory_list->scrollToItem(it);
+	}
+	foreach(ListItem *it, *(core->get_items(QfmCore::Selected))) {
+		if(it->is_selected())
+			ui.selected_list->scrollToItem(it);
 	}
 }
 
@@ -82,6 +97,30 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 			update_layouts();
 		break;
 
+		case Qt::Key_Slash:
+			if(mode == Qfm::Normal) {
+				mode = Qfm::Search;
+				connect(ui.search_line, SIGNAL(textChanged(const QString &)),
+						this, SLOT(set_filter(const QString &)));
+				ui.search_line->setEnabled(true);
+				ui.search_line->setFocus();
+			}
+		break;
+
+		case Qt::Key_Escape:
+			if(mode == Qfm::Search) {
+				mode = Qfm::Normal;
+				disconnect(ui.search_line, 0, this, 0);
+				ui.search_line->clearFocus();
+				ui.search_line->setEnabled(false);
+			}
+		break;
+		
+		case Qt::Key_Space:
+			set_filter("");
+			ui.search_line->setText("");
+		break;
+
 		default:
 			handled = false;
 		break;
@@ -114,6 +153,7 @@ Qfm::up(QfmCore::Buffer b) {
 	core->update_selected_item(b, -1);
 	core->get_items(b)->at(core->get_selected_item(b)+1)->toggle_selected();
 	core->get_items(b)->at(core->get_selected_item(b))->toggle_selected();
+	scroll_everything();
 }
 
 void
@@ -128,6 +168,7 @@ Qfm::down(QfmCore::Buffer b) {
 	if(core->get_selected_item(b) != 0)
 		core->get_items(b)->at(core->get_selected_item(b) - 1)->toggle_selected();
 	core->get_items(b)->at(core->get_selected_item(b))->toggle_selected();
+	scroll_everything();
 }
 
 void 
@@ -156,4 +197,21 @@ Qfm::move_selected(QfmCore::Buffer src, QfmCore::Buffer dest) {
 		core->update_selected_item(src, -1);
 	if((core->get_selected_item(src) >= 0) and (core->get_selected_item(src) < core->get_items(src)->count()))
 		core->get_items(src)->at(core->get_selected_item(src))->toggle_selected();
+}
+
+bool 
+Qfm::eventFilter(QObject *obj, QEvent *event) {
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+		keyPressEvent(keyEvent);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void
+Qfm::set_filter(const QString &str) {
+	core->set_filter(str);
+	core->refresh();
 }

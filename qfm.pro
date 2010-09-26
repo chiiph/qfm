@@ -18,4 +18,4 @@ SOURCES += src/core/qfmcore.cpp \
 MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = src/ui
-FORMS += src/ui/mainwin.ui
+FORMS += src/ui/mainwin2.ui
