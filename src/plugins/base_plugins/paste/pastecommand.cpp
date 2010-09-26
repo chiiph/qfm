@@ -1,8 +1,11 @@
 #include "pastecommand.h"
+#include <QtGui>
 
 PasteCommand::PasteCommand() : 
 	CommandBuffer(QString("copy"), Qt::Key_Y)
 {
+	yesall = false;
+	no = false;
 }
 
 PasteCommand::~PasteCommand() {
@@ -32,7 +35,12 @@ PasteCommand::run(QString current_dir, QStringList files) {
 		}
 
 		delete finfo;
+
+		if(no)
+			break;
 	}
+	no = false;
+	yesall = false;
 }
 
 bool 
@@ -66,9 +74,27 @@ PasteCommand::copyFile(QFileInfo finfo, QDir dest) {
 		return false;
 	
 	QFile file(finfo.filePath());
-	file.copy(dest.absoluteFilePath(finfo.fileName()));
+	QFile filedest(dest.absoluteFilePath(finfo.fileName()));
 
-	return true;
+	if(filedest.exists() and !yesall) {
+		int res = QMessageBox::question(0, tr("Overwrite"),
+				tr("Do you want to overwite ")+finfo.fileName()+tr("?"),
+				QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::Cancel,
+				QMessageBox::Yes);
+		if(res == QMessageBox::Cancel) {
+			no = true;
+			return true;
+		}
+		if(res != QMessageBox::Yes and res != QMessageBox::YesToAll)
+			return false;
+		if(res == QMessageBox::YesToAll)
+			yesall = true;
+	}
+
+	if(filedest.exists())
+		filedest.remove();
+
+	return file.copy(dest.absoluteFilePath(finfo.fileName()));
 }
 
 Q_EXPORT_PLUGIN2(plugin_paste, PasteCommand)

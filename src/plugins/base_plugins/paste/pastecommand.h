@@ -17,6 +17,8 @@ class PasteCommand : public QObject, public CommandBuffer {
 	private:
 		bool copyDir(const QString &src, const QString &dest);
 		bool copyFile(QFileInfo finfo, QDir dest);
+
+		bool yesall, no;
 };
 
 
