@@ -13,10 +13,39 @@
   <property name="windowTitle">
    <string>Qfm</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QLineEdit {
+	border: 1px solid black;
+	border-radius: 0px;
+	selection-background-color: darkgray;
+	background: #262626;
+	color: #DCDCCC;
+}
+
+QListWidget {
+   border: 1px solid black;
+   border-radius: 0px;
+   selection-background-color: darkgray;
+	background: #262626;
+	color: #DCDCCC;
+}
+
+QListWidget::item:selected {
+  border: 1px solid #262626;
+  border-radius: 0px;
+	padding: 0;
+	background: #3F3F3F;
+	color: #FFCFAF;
+	font: bold 16px;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>1</number>
+      </property>
       <item row="1" column="0">
        <widget class="QListWidget" name="directory_list"/>
       </item>
@@ -44,7 +73,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

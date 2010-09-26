@@ -93,6 +93,8 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		break;
 
 		case Qt::Key_Return:
+			core->set_filter("");
+			ui.search_line->setText("");
 			core->navigate();
 			update_layouts();
 		break;

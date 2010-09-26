@@ -154,6 +154,7 @@ QfmCore::navigate() {
 	QFileInfo finfo(get_items(QfmCore::Directory)->at(selected_item.at(QfmCore::Directory))->get_full_path());
 	if(finfo.isDir()) {
 		directory.cd(finfo.filePath());
+		set_filter("");
 		filldir();
 		selected_item[QfmCore::Directory] = 0;
 	} else {
