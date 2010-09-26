@@ -18,6 +18,7 @@ Qfm::Qfm() :
 	ui.selected_list->installEventFilter(this);
 
 	mode = Qfm::Normal;
+	ui.mode_label->setText("Normal");
 }
 
 Qfm::~Qfm() {
@@ -103,6 +104,7 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		case Qt::Key_Slash:
 			if(mode == Qfm::Normal) {
 				mode = Qfm::Search;
+				ui.mode_label->setText("Search");
 				connect(ui.search_line, SIGNAL(textChanged(const QString &)),
 						this, SLOT(set_filter(const QString &)));
 				ui.search_line->setEnabled(true);
@@ -113,6 +115,7 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		case Qt::Key_Escape:
 			if(mode == Qfm::Search) {
 				mode = Qfm::Normal;
+				ui.mode_label->setText("Normal");
 				disconnect(ui.search_line, 0, this, 0);
 				ui.search_line->clearFocus();
 				ui.search_line->setEnabled(false);
