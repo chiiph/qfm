@@ -32,6 +32,8 @@ QfmCore::QfmCore(Qfm *q) :
 	filter.setPattern("");
 
 	filldir();
+	QSettings settings("qfm", "rc");
+	settings.setValue("avi", "smplayer");
 }
 
 QfmCore::~QfmCore() {
@@ -153,8 +155,22 @@ QfmCore::navigate() {
 	if(finfo.isDir()) {
 		directory.cd(finfo.filePath());
 		filldir();
+		selected_item[QfmCore::Directory] = 0;
+	} else {
+		QString ext = finfo.suffix();
+		QSettings settings("qfm", "rc");
+		QString app = settings.value(ext, "").toString();
+		qDebug() << "To Open" << ext << app;
+		if(app.size() == 0) {
+			QMessageBox::warning(0, tr("Unknown file extension"),
+					tr("Don't know what to do with this. Edit the file preferences"));
+			return;
+		}
+		QStringList args;
+		args << finfo.filePath();
+		QProcess *proc = new QProcess(this);
+		proc->start(app, args);
 	}
-	selected_item[QfmCore::Directory] = 0;
 }
 
 #ifdef SHAREDMEM
