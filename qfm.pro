@@ -19,3 +19,4 @@ MOC_DIR = moc
 OBJECTS_DIR = obj
 UI_DIR = src/ui
 FORMS += src/ui/mainwin2.ui
+RESOURCES = src/icons.qrc
