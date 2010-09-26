@@ -53,7 +53,7 @@ QfmCore::filldir() {
 		selected_item[i] = -1;
 	}
 
-	foreach(QString file, directory.entryList().filter(filter)) {
+	foreach(QString file, directory.entryList(QDir::NoFilter, QDir::DirsFirst | QDir::Name).filter(filter)) {
 		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file);
 	}
 
