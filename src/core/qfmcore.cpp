@@ -54,13 +54,14 @@ QfmCore::filldir() {
 	}
 
 	foreach(QString file, directory.entryList(QDir::NoFilter, QDir::DirsFirst | QDir::Name).filter(filter)) {
+		if(file == "." or file == "..") continue;
 		*(get_items(QfmCore::Directory)) << new ListItem(file, directory.absolutePath()+"/"+file);
 	}
 
 	for(int i = 0; i < QfmCore::Last; i++) {
 		if(!get_items((Buffer)i)->empty()) {
-			get_items((Buffer)i)->at(0)->toggle_selected();
-			selected_item[i] = 0;
+//            get_items((Buffer)i)->at(0)->toggle_selected();
+			selected_item[i] = -1;
 		}
 	}
 }
@@ -156,7 +157,7 @@ QfmCore::navigate() {
 		directory.cd(finfo.filePath());
 		set_filter("");
 		filldir();
-		selected_item[QfmCore::Directory] = 0;
+		selected_item[QfmCore::Directory] = -1;
 	} else {
 		QString ext = finfo.suffix();
 		QSettings settings("qfm", "rc");
@@ -308,4 +309,12 @@ QfmCore::gotodir(QString dir) {
 void 
 QfmCore::set_filter(QString f) {
 	filter = QRegExp(f);
+}
+
+void 
+QfmCore::select(Buffer b, int i) {
+	int prev = selected_item[b];
+	get_items(b)->at(prev)->toggle_selected();
+	get_items(b)->at(i)->toggle_selected();
+	selected_item[b] = i;
 }

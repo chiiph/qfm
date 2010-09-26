@@ -41,6 +41,7 @@ Qfm::update_layouts() {
 	foreach(ListItem *it, *(core->get_items(QfmCore::Selected))) {
 		ui.selected_list->addItem(it);
 	}
+	ui.pwd_label->setText(core->pwd());
 }
 
 void
@@ -121,6 +122,14 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		case Qt::Key_Space:
 			set_filter("");
 			ui.search_line->setText("");
+		break;
+		
+		case Qt::Key_Backspace:
+			core->gotodir("..");
+		break;
+		
+		case Qt::Key_F5:
+			core->refresh();
 		break;
 
 		default:

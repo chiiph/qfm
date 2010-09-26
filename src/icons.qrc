@@ -1,6 +1,6 @@
 <RCC>
   <qresource>
-    <file alias="folder">icons/folder.png</file>
     <file alias="generic-file">icons/generic-file.png</file>
+    <file alias="folder">icons/folder.png</file>
   </qresource>
 </RCC>

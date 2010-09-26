@@ -46,7 +46,7 @@ QListWidget::item:selected {
       <property name="spacing">
        <number>1</number>
       </property>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QListWidget" name="directory_list"/>
       </item>
       <item row="0" column="0">
@@ -62,10 +62,17 @@ QListWidget::item:selected {
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLineEdit" name="search_line">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="pwd_label">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -74,6 +81,8 @@ QListWidget::item:selected {
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

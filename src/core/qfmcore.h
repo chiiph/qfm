@@ -32,8 +32,11 @@ class QfmCore : public QObject {
 		void update_dir() { filldir(); }
 		void set_dir(QString dir) { directory.setPath(dir); } 
 		void run(QString, QStringList);
+		QString pwd() { return directory.path(); }
 
 		QMap<Qt::Key, QString> *get_key_map() { return &key_map; }
+
+		void select(Buffer b, int i);
 
 	signals:
 		void refresh_ui();
@@ -83,7 +86,6 @@ class QfmCore : public QObject {
 		QRegExp filter;
 
 		// Loads all the commands to the command_map
-		// TODO: make this more generic
 		void load_commands();
 		// Fills directory_items with
 		// the files in the current dir
