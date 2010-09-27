@@ -1,6 +1,7 @@
 #include "qfm.h"
 #include "core/qfmcore.h"
 #include "listitem.h"
+#include "view_buffer.h"
 
 Qfm::Qfm() : 
 	QMainWindow() {
@@ -95,10 +96,15 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		break;
 
 		case Qt::Key_Return:
-			core->set_filter("");
-			ui.search_line->setText("");
-			core->navigate();
-			update_layouts();
+			if(ev->modifiers() == Qt::NoModifier) {
+				core->set_filter("");
+				ui.search_line->setText("");
+				core->navigate();
+				update_layouts();
+			} else if(ev->modifiers() == Qt::ShiftModifier) {
+				ViewBuffer v;
+				v.exec();
+			}
 		break;
 
 		case Qt::Key_Slash:

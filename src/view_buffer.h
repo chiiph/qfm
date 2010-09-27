@@ -13,6 +13,7 @@ class ViewBuffer : public QDialog {
 	
 	private:
 		Ui::view_buffer ui;
+};
 
 #endif // VIEWBUG_H
 

@@ -9,10 +9,12 @@ DESTDIR = bin
 HEADERS += src/interfaces/commandbuffer.h \
 	src/core/qfmcore.h \
 	src/qfm.h \
+	src/view_buffer.h \
 	src/listitem.h
 SOURCES += src/core/qfmcore.cpp \
 	src/main.cpp \
 	src/qfm.cpp \
+	src/view_buffer.cpp \
 	src/listitem.cpp
 
 MOC_DIR = moc

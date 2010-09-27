@@ -73,9 +73,11 @@ QfmCore::load_buffer(QString command, QStringList files) {
 
 	QString strbuf = "Qfm;";
 	strbuf += command + ";";
+	QString concatbuf = "";
 
 	foreach(QString file, files) {
 		strbuf += file + ";";
+		concatbuf += file + ";";
 	}
 
 #ifdef SHAREDMEM
@@ -83,7 +85,36 @@ QfmCore::load_buffer(QString command, QStringList files) {
 
 	timer.start(10);
 #else
+	qDebug() << "STARTINGGG";
 	QClipboard *clipboard = QApplication::clipboard();
+	QStringList text = clipboard->text().split(";", QString::SkipEmptyParts);
+	qDebug() << text;
+	qDebug() << text.count();
+	if(text.count() < 3 and text.count() != 0) return;
+	qDebug() << "PASO";
+	if(text.count() != 0) {
+		if(text.takeAt(0) == "Qfm") {
+			qDebug() << "it's a qfm buffer!!";
+			if(text.takeAt(0) == command) {
+				qDebug() << "concatening!!!";
+				// Use a set to avoid having repeated files/dirs
+				QSet<QString> set;
+				QString buffer = clipboard->text() + concatbuf;
+				QStringList listbuffer = buffer.split(";", QString::SkipEmptyParts);
+				listbuffer.takeAt(0);
+				listbuffer.takeAt(0);
+				set = QSet<QString>::fromList(listbuffer);
+				QString newbuffer = "Qfm;";
+				newbuffer += command+";";
+				QStringList newl = set.toList();
+				newbuffer += newl.join(";");
+				qDebug() << newbuffer;
+				clipboard->setText(newbuffer);
+				return;
+			}
+		}
+	}
+	qDebug() << "not concatening";
 	clipboard->setText(strbuf);	
 #endif
 }
