@@ -32,8 +32,7 @@ QfmCore::QfmCore(Qfm *q) :
 	filter.setPattern("");
 
 	filldir();
-	QSettings settings("qfm", "rc");
-	settings.setValue("avi", "smplayer");
+	QSettings::setDefaultFormat(QSettings::IniFormat);
 }
 
 QfmCore::~QfmCore() {
