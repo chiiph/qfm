@@ -87,6 +87,8 @@ QfmCore::load_buffer(QString command, QStringList files) {
 #else
 	qDebug() << "STARTINGGG";
 	QClipboard *clipboard = QApplication::clipboard();
+	if(!clipboard->text().startsWith("Qfm"))
+		clipboard->setText("");
 	QStringList text = clipboard->text().split(";", QString::SkipEmptyParts);
 	qDebug() << text;
 	qDebug() << text.count();
@@ -121,6 +123,7 @@ QfmCore::load_buffer(QString command, QStringList files) {
 
 void 
 QfmCore::flush_buffer() {
+	qDebug() << "flushing";
 	QString current_dir = directory.absolutePath();
 	QString text = "";
 
@@ -133,10 +136,12 @@ QfmCore::flush_buffer() {
 #else
 	QClipboard *clipboard = QApplication::clipboard();
 	text = clipboard->text();
+	clipboard->setText("");
 #endif
 
 	QStringList files = text.split(";", QString::SkipEmptyParts);
 	QString pid = files.takeAt(0);
+	qDebug() << text;
 	if(pid != "Qfm") return; // Check whether the buffer was set by qfm
 	QString cmd = files.takeAt(0);
 	qDebug() << "Command to run:";
