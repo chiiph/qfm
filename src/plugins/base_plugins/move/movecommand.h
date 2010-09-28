@@ -17,10 +17,6 @@ class MoveCommand : public QObject, public CommandBuffer {
 	
 	private:
 		void runPaste(QString current_dir, QStringList files);
-		void runDelete(QString current_dir, QStringList files);
-		bool copyDir(const QString &src, const QString &dest);
-		bool copyFile(QFileInfo finfo, QDir dest);
-		bool removeDir(const QString &dirName);
 };
 
 
