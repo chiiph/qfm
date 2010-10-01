@@ -30,6 +30,7 @@ QfmCore::QfmCore(Qfm *q) :
 		selected_item.append(0);
 
 	filter.setPattern("");
+	filter.setCaseSensitivity(Qt::CaseInsensitive);
 
 	filldir();
 	QSettings::setDefaultFormat(QSettings::IniFormat);
@@ -343,7 +344,7 @@ QfmCore::gotodir(QString dir) {
 
 void 
 QfmCore::set_filter(QString f) {
-	filter = QRegExp(f);
+	filter = QRegExp(f, Qt::CaseInsensitive);
 }
 
 void 

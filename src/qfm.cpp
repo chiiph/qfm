@@ -96,6 +96,14 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 		break;
 
 		case Qt::Key_Return:
+			if(mode == Qfm::Search) {
+				mode = Qfm::Normal;
+				ui.mode_label->setText("Normal");
+				disconnect(ui.search_line, 0, this, 0);
+				ui.search_line->clearFocus();
+				ui.search_line->setEnabled(false);
+				break;
+			}
 			if(ev->modifiers() == Qt::NoModifier) {
 				core->set_filter("");
 				ui.search_line->setText("");
