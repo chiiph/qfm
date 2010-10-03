@@ -115,6 +115,13 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 			}
 		break;
 
+		case Qt::Key_H:
+			core->set_filter("");
+			ui.search_line->setText("");
+			core->navigate();
+			update_layouts();
+		break;
+
 		case Qt::Key_Slash:
 			if(mode == Qfm::Normal) {
 				mode = Qfm::Search;
