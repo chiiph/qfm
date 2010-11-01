@@ -97,11 +97,11 @@ Qfm::keyPressEvent(QKeyEvent *ev) {
 
 		case Qt::Key_Return:
 			if(mode == Qfm::Search) {
-				mode = Qfm::Normal;
-				ui.mode_label->setText("Normal");
-				disconnect(ui.search_line, 0, this, 0);
-				ui.search_line->clearFocus();
-				ui.search_line->setEnabled(false);
+				down(QfmCore::Directory);
+				core->navigate();
+				update_layouts();
+				core->set_filter("");
+				ui.search_line->setText("");
 				break;
 			}
 			if(ev->modifiers() == Qt::NoModifier) {
